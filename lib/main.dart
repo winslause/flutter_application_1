@@ -194,7 +194,6 @@ import 'package:flutter/material.dart';
 //   ]));
 // }
 
-
 //TO DO
 // class Todo {
 //   final String title;
@@ -309,211 +308,272 @@ import 'package:flutter/material.dart';
 //   }
 // }
 
-
 //display items on  a drawer
 
+// To do list with input
 
+// class Todo {
+//   final String title;
+//   final String description;
+//   final TimeOfDay time;
+//   final DateTime date;
 
+//   const Todo(this.title, this.description, this.time, this.date);
+// }
 
-class Todo {
-  final String title;
-  final String description;
-  final TimeOfDay time;
-  final DateTime date;
+// List<Todo> _todos = [
+//   Todo("Task one", "go to school", TimeOfDay.now(), DateTime.now()),
+//   Todo("Task two", "GO TO CHURCH", TimeOfDay.now(), DateTime.now()),
+// ];
 
-  const Todo(this.title, this.description, this.time, this.date);
-}
+// void main() {
+//   runApp(MaterialApp(title: 'App', home: TodosScreen(todos: _todos)));
+// }
 
-List<Todo> _todos = [
-  Todo("Task one", "go to school", TimeOfDay.now(), DateTime.now()),
-  Todo("Task two", "GO TO CHURCH", TimeOfDay.now(), DateTime.now()),
-];
+// class TodosScreen extends StatefulWidget {
+//   const TodosScreen({Key? key, required this.todos}) : super(key: key);
 
-void main() {
-  runApp(MaterialApp(title: 'App', home: TodosScreen(todos: _todos)));
-}
+//   final List<Todo> todos;
 
-class TodosScreen extends StatefulWidget {
-  const TodosScreen({Key? key, required this.todos}) : super(key: key);
+//   @override
+//   _TodosSreenState createState() => _TodosSreenState();
+// }
 
-  final List<Todo> todos;
+// class _TodosSreenState extends State<TodosScreen> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: const Text("My Tasks")),
+//       body: ListView.builder(
+//         itemCount: _todos.length,
+//         itemBuilder: (context, index) {
+//           return ListTile(
+//             title: Text(_todos[index].title),
+//             subtitle: Text(_todos[index].time.format(context)),
+//             trailing: IconButton(
+//               icon: const Icon(Icons.delete),
+//               onPressed: () {
+//                 setState(() {
+//                   _todos.removeAt(index);
+//                 });
+//               },
+//             ),
+//             onTap: () {
+//               Navigator.push(
+//                 context,
+//                 MaterialPageRoute(
+//                   builder: (context) => DetailScreen(todo: _todos[index]),
+//                 ),
+//               );
+//             },
+//           );
+//         },
+//       ),
+//       floatingActionButton: FloatingActionButton(
+//         onPressed: () async {
+//           final Todo? newTodo = await showDialog<Todo>(
+//             context: context,
+//             builder: (BuildContext context) {
+//               String? title;
+//               String? description;
+//               TimeOfDay time = TimeOfDay.now();
+//               DateTime? date = DateTime.now();
 
-  @override
-  _TodosSreenState createState() => _TodosSreenState();
-}
+//               return AlertDialog(
+//                 title: const Text("Create New Task"),
+//                 content: Column(
+//                   children: <Widget>[
+//                     TextField(
+//                       onChanged: (value) => title = value,
+//                       decoration: const InputDecoration(labelText: "Title"),
+//                     ),
+//                     TextField(
+//                       onChanged: (value) => description = value,
+//                       decoration:
+//                           const InputDecoration(labelText: "Descripton"),
+//                     ),
+//                     ListTile(
+//                       title: const Text("Time"),
+//                       trailing: Text(time.format(context)),
+//                       onTap: () async {
+//                         final newTime = await showTimePicker(
+//                           context: context,
+//                           initialTime: time,
+//                         );
+//                         if (newTime != null) {
+//                           time = newTime;
+//                         }
+//                       },
+//                     ),
+//                     ListTile(
+//                       title: const Text("Date"),
+//                       trailing: Text(date.toString().split(' ')[0]),
+//                       onTap: () async {
+//                         final newDate = await showDatePicker(
+//                           context: context,
+//                           initialDate: date,
+//                           firstDate: DateTime(2000),
+//                           lastDate: DateTime(2100),
+//                         );
+//                         if (newDate != null) {
+//                           date = newDate;
+//                         }
+//                       },
+//                     ),
+//                   ],
+//                 ),
+//                 actions: <Widget>[
+//                   TextButton(
+//                     child: const Text("Cancel"),
+//                     onPressed: () {
+//                       Navigator.pop(context);
+//                     },
+//                   ),
+//                   TextButton(
+//                     child: const Text("Save"),
+//                     onPressed: () {
+//                       if (title != null &&
+//                           description != null &&
+//                           time != null &&
+//                           date != null) {
+//                         Navigator.pop(
+//                             context, Todo(title!, description!, time, date!));
+//                       }
+//                     },
+//                   )
+//                 ],
+//               );
+//             },
+//           );
 
-class _TodosSreenState extends State<TodosScreen> {
+//           if (newTodo != null) {
+//             setState(() {
+//               _todos.add(newTodo);
+//             });
+//           }
+//         },
+//         child: const Icon(Icons.add),
+//       ),
+//       drawer: Drawer(
+//         child: ListView(
+//           children: [
+//             DrawerHeader(
+//               decoration: const BoxDecoration(color: Colors.blue),
+//               child: Padding(
+//                 padding: const EdgeInsets.all(8.0),
+//                 child: Text(
+//                   "Todo List",
+//                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+//                         color: Colors.white,
+//                       ),
+//                 ),
+//               ),
+//             ),
+//             ...widget.todos.map(
+//               (todo) => ListTile(
+//                 title: Text(todo.title),
+//                 subtitle: Text(
+//                     "${todo.date.toString().split(' ')[0]} ${todo.time.format(context)}"),
+//                 onTap: () {
+//                   Navigator.push(
+//                     context,
+//                     MaterialPageRoute(
+//                       builder: (context) => DetailScreen(todo: todo),
+//                     ),
+//                   );
+//                 },
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// class DetailScreen extends StatelessWidget {
+//   const DetailScreen({Key? key, required this.todo}) : super(key: key);
+//   final Todo todo;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: Text(todo.title)),
+//       body: Padding(
+//         padding: const EdgeInsets.all(16.0),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Text(todo.description),
+//             const SizedBox(height: 16),
+//             Text("Time: ${todo.time.format(context)}"),
+//             Text("Date: ${todo.date.toString().split(' ')[0]}"),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("My Tasks")),
-      body: ListView.builder(
-        itemCount: _todos.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(_todos[index].title),
-            subtitle: Text(_todos[index].time.format(context)),
-            trailing: IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () {
-                setState(() {
-                  _todos.removeAt(index);
-                });
-              },
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetailScreen(todo: _todos[index]),
-                ),
-              );
-            },
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final Todo? newTodo = await showDialog<Todo>(
-            context: context,
-            builder: (BuildContext context) {
-              String? title;
-              String? description;
-              TimeOfDay time = TimeOfDay.now();
-              DateTime? date = DateTime.now();
+    const appTitle = "Styling demo";
 
-              return AlertDialog(
-                title: const Text("Create New Task"),
-                content: Column(
-                  children: <Widget>[
-                    TextField(
-                      onChanged: (value) => title = value,
-                      decoration: const InputDecoration(labelText: "Title"),
-                    ),
-                    TextField(
-                      onChanged: (value) => description = value,
-                      decoration:
-                          const InputDecoration(labelText: "Descripton"),
-                    ),
-                    ListTile(
-                      title: const Text("Time"),
-                      trailing: Text(time.format(context)),
-                      onTap: () async {
-                        final newTime = await showTimePicker(
-                          context: context,
-                          initialTime: time,
-                        );
-                        if (newTime != null) {
-                          time = newTime;
-                        }
-                      },
-                    ),
-                    ListTile(
-                      title: const Text("Date"),
-                      trailing: Text(date.toString().split(' ')[0]),
-                      onTap: () async {
-                        final newDate = await showDatePicker(
-                          context: context,
-                          initialDate: date,
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
-                        );
-                        if (newDate != null) {
-                          date = newDate;
-                        }
-                      },
-                    ),
-                  ],
-                ),
-                actions: <Widget>[
-                  TextButton(
-                    child: const Text("Cancel"),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  TextButton(
-                    child: const Text("Save"),
-                    onPressed: () {
-                      if (title != null &&
-                          description != null &&
-                          time != null &&
-                          date != null) {
-                        Navigator.pop(
-                            context, Todo(title!, description!, time, date!));
-                      }
-                    },
-                  )
-                ],
-              );
-            },
-          );
+    return MaterialApp(
+      title: appTitle,
+      theme: ThemeData(
+        primarySwatch: Colors.red,
+        fontFamily: "roboto"
+      ),
+      home: Scaffold(
+        appBar: AppBar(title: Text(appTitle),
+        centerTitle: true,
+        
+        ) ,
+        body: MyCustomForm()
 
-          if (newTodo != null) {
-            setState(() {
-              _todos.add(newTodo);
-            });
-          }
-        },
-        child: const Icon(Icons.add),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(color: Colors.blue),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Todo List",
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        color: Colors.white,
-                      ),
-                ),
-              ),
-            ),
-            ...widget.todos.map(
-              (todo) => ListTile(
-                title: Text(todo.title),
-                subtitle: Text(
-                    "${todo.date.toString().split(' ')[0]} ${todo.time.format(context)}"),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DetailScreen(todo: todo),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
+        )
     );
   }
 }
 
-class DetailScreen extends StatelessWidget {
-  const DetailScreen({Key? key, required this.todo}) : super(key: key);
-  final Todo todo;
+class MyCustomForm extends StatelessWidget{
+  const MyCustomForm ({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(todo.title)),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(todo.description),
-            const SizedBox(height: 16),
-            Text("Time: ${todo.time.format(context)}"),
-            Text("Date: ${todo.date.toString().split(' ')[0]}"),
-          ],
-        ),
-      ),
-    );
-  }
+Widget build(BuildContext context){
+  return SingleChildScrollView(
+    padding: const EdgeInsets.all(24),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        const SizedBox(height:16),
+        TextField(
+          decoration: InputDecoration(hintText: "Text Field"),
+      ), 
+      const SizedBox(height: 16),
+      TextFormField(decoration: InputDecoration(labelText: "TEXT FORM FIELD"),), 
+      const SizedBox(height: 16),
+      ElevatedButton(
+        onPressed: (){
+
+      },
+       child: Text("Submit"))],
+    ),
+
+  );
 }
+}
+
+
+
+
+
+
+
+
